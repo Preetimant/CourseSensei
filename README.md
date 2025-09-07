@@ -8,9 +8,9 @@ CourseSensei is an ontology-driven NLP chatbot that answers course-related queri
 
 * **Automated data ingestion** — Extracts tabular and textual sections from course PDFs/DOCX (metadata, instructor details, assessment tables, session plans) and stores them as structured JSON.
 * **OWL ontology generation** — Converts JSON course records into a machine‑readable ontology (OWL) modeling Programs, Terms, Courses, Sessions, Assessments, and Instructors.
-* **Dialogflow intent generation** — Produces Dialogflow intent JSONs + entity files automatically (training phrases, parameter mapping) for \~30 course-related queries.
 * **Ontology-backed webhook** — A Flask webhook loads the OWL file using `owlready2`, answers queries by traversing object/data properties, supports pagination and cached lookups.
-* **Easy deployment workflow** — Extract information → Generate JSON → Build Ontology → Generate Intents → Import into Dialogflow Agent → Expose Flask Webhook (ngrok) → Wire Dialogflow webhook.
+* **Dialogflow intent generation** — Produces Dialogflow intent JSONs + entity files automatically (training phrases, parameter mapping) for \~30 course-related queries.
+* **Easy deployment workflow** — Extract information → Generate JSON → Build Ontology → Expose Flask Webhook (ngrok) → Wire Dialogflow webhook → Generate Intents → Import into Dialogflow Agent.
 
 ---
 
@@ -33,9 +33,9 @@ CourseSensei is an ontology-driven NLP chatbot that answers course-related queri
 
 2. **Generate OWL** — The script `extractor+owl.ipynb` also converts the JSON collection into an OWL ontology (`university_courses.owl`). This script defines classes like `Program`, `Term`, `Course`, `Assessment`, `SessionPlan` and sets up object/data properties used by the webhook.
 
-3. **Create Dialogflow agent** — Run `intent-generation.ipynb` to create Dialogflow intent files and entity files in a `dialogflow_agent/` folder, then package them into a zip that should be imported in Dialogflow. The generator creates \~30 intents (examples in `querieslist.docx`) and wires each intent to call the webhook for answers.
+3.**Run webhook** — Start `webhook.py` (a Flask app). The webhook loads `university_courses.owl`, accepts Dialogflow webhook requests, runs query handlers (instructor lookup, assessment percentage, session details, etc.) and returns `fulfillmentText` responses. Expose the webhook using `ngrok` for Dialogflow to reach it. 
 
-4. **Run webhook** — Start `webhook.py` (a Flask app). The webhook loads `university_courses.owl`, accepts Dialogflow webhook requests, runs query handlers (instructor lookup, assessment percentage, session details, etc.) and returns `fulfillmentText` responses. Expose the webhook using `ngrok` for Dialogflow to reach it.
+4. **Create Dialogflow agent** — Run `intent-generation.ipynb` to create Dialogflow intent files and entity files in a `dialogflow_agent/` folder, then package them into a zip that should be imported in Dialogflow. The generator creates \~30 intents (examples in `querieslist.docx`) and wires each intent to call the webhook for answers.
 
 5. **Import & test** — Import the generated Dialogflow agent zip in Dialogflow console, set the webhook URL to your ngrok forwarding URL + `/webhook`, and test queries (sample queries are in `querieslist.docx`).
 
