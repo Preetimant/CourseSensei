@@ -33,7 +33,7 @@ CourseSensei is an ontology-driven NLP chatbot that answers course-related queri
 
 2. **Generate OWL** — The script `extractor+owl.ipynb` also converts the JSON collection into an OWL ontology (`university_courses.owl`). This script defines classes like `Program`, `Term`, `Course`, `Assessment`, `SessionPlan` and sets up object/data properties used by the webhook.
 
-3.**Run webhook** — Start `webhook.py` (a Flask app). The webhook loads `university_courses.owl`, accepts Dialogflow webhook requests, runs query handlers (instructor lookup, assessment percentage, session details, etc.) and returns `fulfillmentText` responses. Expose the webhook using `ngrok` for Dialogflow to reach it. 
+3. **Run webhook** — Start `webhook.py` (a Flask app). The webhook loads `university_courses.owl`, accepts Dialogflow webhook requests, runs query handlers (instructor lookup, assessment percentage, session details, etc.) and returns `fulfillmentText` responses. Expose the webhook using `ngrok` for Dialogflow to reach it.
 
 4. **Create Dialogflow agent** — Run `intent-generation.ipynb` to create Dialogflow intent files and entity files in a `dialogflow_agent/` folder, then package them into a zip that should be imported in Dialogflow. The generator creates \~30 intents (examples in `querieslist.docx`) and wires each intent to call the webhook for answers.
 
